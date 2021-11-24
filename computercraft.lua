@@ -3,7 +3,7 @@ function getContents(chestData)
     if chestData["Items"][0] == nil then
         return nil
     end
-    local itemAmt = table.getn(chestData["Item"]+1)
+    local itemAmt = table.getn(chestData["Items"])
     local tempDict = {}
     for i=0,itemAmt do 
         if(tempDict[chestData["Items"][i]["id"]]) then
@@ -14,4 +14,9 @@ function getContents(chestData)
     end
     return tempDict
 end
-print(getContents(bReader.getBlockData());
+local test = getContents(bReader.getBlockData())
+table.getn(test)
+for i in ipairs(test) do
+    print test[i]
+end
+print(test);
