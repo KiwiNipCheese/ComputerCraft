@@ -16,7 +16,7 @@ function getContents(chestData)
     return tempDict
 end
 local test = getContents(bReader.getBlockData())
-table.getn(test)
+print(table.getn(test))
 for i in ipairs(test) do
     print(test[i])
 end
