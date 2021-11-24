@@ -17,6 +17,6 @@ end
 local test = getContents(bReader.getBlockData())
 table.getn(test)
 for i in ipairs(test) do
-    print test[i]
+    print(test[i])
 end
 print(test);
