@@ -6,10 +6,11 @@ function getContents(chestData)
     local itemAmt = table.getn(chestData["Items"])
     local tempDict = {}
     for i=0,itemAmt do 
-        if(tempDict[chestData["Items"][i]["id"]]) then
-            tempDict[chestData["Items"][i]["id"]] = tempDict[chestData["Items"][i]["id"]] + chestData["Items"][i]["count"]
+        local tString = chestData.Items[i].id
+        if(tempDict[tString]) then
+            tempDict[tString] = tempDict[tString] + chestData["Items"][i]["Count"]
         else
-        tempDict[chestData["Items"][i]["id"]] = chestData["Items"][i]["count"]
+            tempDict[tString] = chestData["Items"][i]["Count"]
         end
     end
     return tempDict
