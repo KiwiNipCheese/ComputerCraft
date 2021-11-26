@@ -1,6 +1,6 @@
 iChest =  peripheral.wrap("top");
 fCrafter = peripheral.wrap("left");
-oChest = peripheral.wrap("bottom");;
+oChest = peripheral.wrap("bottom");
 oChestSide = "bottom";
 fCrafterSide = "left";
 recipes = 
@@ -9,8 +9,11 @@ recipes =
         ,
         {
             {"draconicevolution:basic_crafting_injector",1}
+            ,
             {"minecraft:diamond",4}
+            ,
             {"draconicevolution:draconium_block",1}
+            ,
             {"draconicevolution:draonium_core",2}
         }
     }
@@ -21,7 +24,7 @@ function getContents(inventory)
     for i,val in next,invData do 
         local tString = invData[i].name;
         if(tempDict[i]) then
-            tempDict[i] = {val["name"],tempDict[tString] + val["count"]});
+            tempDict[i] = {val["name"],tempDict[tString] + val["count"]};
         else
             tempDict[i] = {val["name"],val["count"]};
         end
@@ -29,22 +32,33 @@ function getContents(inventory)
     return tempDict;
 end
 function checkRecipe(recipeList,contents)
-    local recipeBool = false;
+    local recipeBool = true;
     for index,recipe in next,recipeList do
+        local rCheck = {}
         for index2,ingredients in next,recipe[2] do
-            if recipeBool == false && recipe[2][1][1] == ingredients[1] then
-                recipeBool = true;
-            end
+            local r1 = false;
+            local r2 = false;
             for index3,chestContents in next,contents do
                 if chestContents[1] == ingredients[1] then
+                    r1 = true
                     if chestContents[2] % ingredients[2] == 0 then
+                        r2 = true;
                     else
-                        recipeBool = false;
-                        break 
                     end
                 end
             end
+            if r1 and r2 then
+                rCheck[index2] = true
+            else 
+                rCheck[index2] = false
+            end
         end
+        for i,val in next,rCheck do
+            if not val then
+                recipeBool = false 
+                break
+            end
+        end    
         if recipeBool then
             return recipe;
         end
