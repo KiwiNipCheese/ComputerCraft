@@ -18,24 +18,24 @@ recipes =
 function getContents(inventory)
     local invData = inventory.list();
     local tempDict = {};
-    for i in next,invData do 
+    for i,val in next,invData do 
         local tString = invData[i].name;
-        if(tempDict[tString]) then
-            table.insert(tempDict,i,{invData[i]["name"],tempDict[tString] + invData[i]["count"]});
+        if(tempDict[i]) then
+            tempDict[i] = {val["name"],tempDict[tString] + val["count"]});
         else
-            tempDict[i] = invData[i]["count"];
+            tempDict[i] = {val["name"],val["count"]};
         end
     end
     return tempDict;
 end
 function checkRecipe(recipeList,contents)
     local recipeBool = false;
-    for recipe in next,recipeList do
-        for ingredients in next,recipe[2] do
+    for index,recipe in next,recipeList do
+        for index2,ingredients in next,recipe[2] do
             if recipeBool == false && recipe[2][1][1] == ingredients[1] then
                 recipeBool = true;
             end
-            for chestContents in next,contents do
+            for index3,chestContents in next,contents do
                 if chestContents[1] == ingredients[1] then
                     if chestContents[2] % ingredients[2] == 0 then
                     else
