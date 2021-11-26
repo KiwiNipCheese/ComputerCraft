@@ -1,7 +1,7 @@
 iChest =  peripheral.wrap("top");
 fCrafter = peripheral.wrap("left");
-oChest = peripheral.wrap("bottom");
-oChestSide = "bottom";
+oChest = peripheral.wrap("right");
+oChestSide = "right";
 fCrafterSide = "left";
 recipes = 
 {
@@ -14,7 +14,62 @@ recipes =
             ,
             {"draconicevolution:draconium_block",1}
             ,
-            {"draconicevolution:draonium_core",2}
+            {"draconicevolution:draconium_core",2}
+            ,
+            {"draconicevolution:wyvern_core",1}
+        }
+    }
+    ,
+    {"draconicevolution:awakened_core"  
+        ,
+        {
+            {"minecraft:nether_star",1}
+            ,
+            {"draconicevolution:wyvern_core",4}
+            ,
+            {"draconicevolution:awakened_draconium_ingot",4}
+        }
+    }
+    ,
+    {"draconicevolution:awakened_crafting_injector"  
+        ,
+        {
+            {"draconicevolution:wyvern_crafting_injector",1}
+            ,
+            {"minecraft:diamond",4}
+            ,
+            {"draconicevolution:awakened_draconium_block",2}
+            ,
+            {"draconicevolution:wyvern_core",2}
+        }
+    }
+    ,
+    {"draconicevolution:chaotic_crafting_injector"  
+        ,
+        {
+            {"draconicevolution:awakened_crafting_injector",1}
+            ,
+            {"minecraft:diamond",4}
+            ,
+            {"minecraft:dragon_egg",1}
+            ,
+            {"draconicevolution:large_chaos_frag",4}
+
+        }
+    }
+    ,
+    {"kubejs:uru_ingot"  
+        ,
+        {
+            {"draconicevolution:chaos_shard",1}
+            ,
+            {"allthemodium:vibranium_allthemodium_alloy_ingot",1}
+            ,
+            {"allthemodium:unobtainium_vibranium_alloy_ingot",1}
+            ,
+            {"allthemodium:unobtainium_allthemodium_alloy_ingot",1}
+            ,
+            {"draconicevolution:awakened_draconium_ingot",1}
         }
     }
 }
@@ -68,37 +123,47 @@ end
 function rpushToChest(itemID,count,chest,side)
     local chestList = chest.list();
     local currentCount = count;
-    local j = 1;
     for i,k in next,chestList do
         if k.name == itemID then
             if ( k.count >= currentCount) then
-                currentCount = currentCount - chest.pushItems(side,j,currentCount);
-                return true;
+            print(itemID, currentCount,side)
+                currentCount = currentCount - chest.pushItems(side,i,currentCount);
+                break;
             else
-                currentCount = currentCount - chest.pushItems(side,j,currentCount);
+                currentCount = currentCount - chest.pushItems(side,is);
             end
             
         end
-        j = j+1;
     end
     return false
 end
 while true do
     local recipeCheck = checkRecipe(recipes,getContents(iChest))
     if recipeCheck then
-        rpushToChest(recipeCheck[2][1][1],recipeCheck[2][1][2],iChest,fCrafter,1);
-        for i=2,table.getn(recipeCheck) do
-            rpushToChest(recipeCheck[2][i][1],recipeCheck[2][i][2],iChest,oChest);
+        print(recipeCheck[2][1][1])
+        rpushToChest(recipeCheck[2][1][1],recipeCheck[2][1][2],iChest,fCrafterSide);
+        for i,val in next,recipeCheck[2] do
+            if i == 1 then 
+            print(val[1],val[2])
+            rpushToChest(val[1][1],val[1][2],iChest,fCrafterSide);
+                    
+            else
+            print(i,val[2])
+            rpushToChest(val[1],val[2],iChest,oChestSide);
+            end
+        end
+        while not(oChest.list()[1] == nil) do
+            sleep(.25)
         end
         rs.setOutput("left",true);
         os.sleep(1);
-        rs.setOuptut("left",false);
-        while not (fCrafter.list[2] == nil) do
+        rs.setOutput("left",false);
+        while (fCrafter.list()[2] == nil) do
             os.sleep(1)
         end
         print(recipeCheck[1],"succesfully crafted")
-        rs.setOuptut("front",true);
+        rs.setOutput("front",true);
         os.sleep(1);
-        rs.setOuptut("front",false);
+        rs.setOutput("front",false);
     end
 end
